@@ -1,0 +1,25 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "source": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alek-Grujic/Forkify-app.git"
+  },
+  "author": "Alek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alek-Grujic/Forkify-app/issues"
+  },
+  "homepage": "https://github.com/Alek-Grujic/Forkify-app#readme",
+  "description": "",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.16.4",
+    "parcel": "^2.16.4",
+    "sass": "^1.98.0"
+  }
+}
