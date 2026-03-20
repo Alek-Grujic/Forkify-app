@@ -8,6 +8,8 @@ const timeout = function (s) {
   });
 };
 
+import icons from 'url:../img/icons.svg';
+
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
 
@@ -50,6 +52,23 @@ showRecipe();
 recipeContainer.innerHTML = '';
 
 const renderRecipe = function (recipe) {
+  const ingredientsMarkup = recipe.ingredients
+    .map(
+      ing => `
+      <li class="recipe__ingredient">
+        <svg class="recipe__icon">
+          <use href="${icons}#icon-check"></use>
+        </svg>
+        <div class="recipe__quantity">${ing.quantity ?? ''}</div>
+        <div class="recipe__description">
+          <span class="recipe__unit">${ing.unit ?? ''}</span>
+          ${ing.description}
+        </div>
+      </li>
+    `,
+    )
+    .join('');
+
   const markup = `
     <figure class="recipe__fig">
       <img src="${recipe.image}" alt="${recipe.title}" class="recipe__img" />
@@ -57,6 +76,13 @@ const renderRecipe = function (recipe) {
         <span>${recipe.title}</span>
       </h1>
     </figure>
+
+    <div class="recipe__ingredients">
+      <h2 class="heading--2">Recipe ingredients</h2>
+      <ul class="recipe__ingredient-list">
+        ${ingredientsMarkup}
+      </ul>
+    </div>
   `;
 
   recipeContainer.innerHTML = '';
