@@ -207,11 +207,11 @@
       });
     }
   }
-})({"5DuvQ":[function(require,module,exports,__globalThis) {
+})({"jYB9d":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 1234;
+var HMR_SERVER_PORT = 50375;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -721,10 +721,49 @@ const timeout = function(s) {
             reject(new Error(`Request took too long! Timeout after ${s} second`));
         }, s * 1000);
     });
-}; // NEW API URL (instead of the one shown in the video)
- // https://forkify-api.jonas.io
- ///////////////////////////////////////
+};
+// NEW API URL (instead of the one shown in the video)
+// https://forkify-api.jonas.io
+///////////////////////////////////////
+const showRecipe = async function() {
+    try {
+        const res = await fetch('https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886');
+        const data = await res.json();
+        console.log(res, data);
+        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        let { recipe } = data.data;
+        recipe = {
+            id: recipe.id,
+            title: recipe.title,
+            publisher: recipe.publisher,
+            sourceUrl: recipe.source_url,
+            image: recipe.image_url,
+            servings: recipe.servings,
+            cookingTime: recipe.cooking_time,
+            ingredients: recipe.ingredients
+        };
+        console.log(recipe);
+        renderRecipe(recipe);
+    } catch (err) {
+        alert(err);
+    }
+};
+showRecipe();
+// render data
+recipeContainer.innerHTML = '';
+const renderRecipe = function(recipe) {
+    const markup = `
+    <figure class="recipe__fig">
+      <img src="${recipe.image}" alt="${recipe.title}" class="recipe__img" />
+      <h1 class="recipe__title">
+        <span>${recipe.title}</span>
+      </h1>
+    </figure>
+  `;
+    recipeContainer.innerHTML = '';
+    recipeContainer.insertAdjacentHTML('afterbegin', markup);
+};
 
-},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire3a11", {})
+},{}]},["jYB9d","7dWZ8"], "7dWZ8", "parcelRequire3a11", {})
 
 //# sourceMappingURL=Forkify-app.4a59a05f.js.map
