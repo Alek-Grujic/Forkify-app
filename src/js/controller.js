@@ -10,6 +10,8 @@ const timeout = function (s) {
 
 import icons from 'url:../img/icons.svg';
 
+let recipe;
+
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
 
@@ -26,16 +28,28 @@ const showRecipe = async function () {
 
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
 
-    let { recipe } = data.data;
+    // let { recipe } = data.data;
+    // recipe = {
+    //   id: recipe.id,
+    //   title: recipe.title,
+    //   publisher: recipe.publisher,
+    //   sourceUrl: recipe.source_url,
+    //   image: recipe.image_url,
+    //   servings: recipe.servings,
+    //   cookingTime: recipe.cooking_time,
+    //   ingredients: recipe.ingredients,
+    // };
+
+    const { recipe: recipeData } = data.data;
     recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
+      id: recipeData.id,
+      title: recipeData.title,
+      publisher: recipeData.publisher,
+      sourceUrl: recipeData.source_url,
+      image: recipeData.image_url,
+      servings: recipeData.servings,
+      cookingTime: recipeData.cooking_time,
+      ingredients: recipeData.ingredients,
     };
 
     console.log(recipe);
@@ -120,3 +134,24 @@ const renderRecipe = function (recipe) {
   recipeContainer.innerHTML = '';
   recipeContainer.insertAdjacentHTML('afterbegin', markup);
 };
+
+const updateServings = function (newServings) {
+  recipe.ingredients.forEach(ing => {
+    ing.quantity = (ing.quantity * newServings) / recipe.servings;
+  });
+
+  recipe.servings = newServings;
+};
+
+recipeContainer.addEventListener('click', function (e) {
+  const btn = e.target.closest('.btn--increase-servings');
+
+  if (!btn) return;
+
+  const newServings = Number(btn.dataset.updateTo);
+
+  if (newServings > 0) {
+    updateServings(newServings);
+    renderRecipe(recipe);
+  }
+});
