@@ -69,6 +69,7 @@ const renderRecipe = function (recipe) {
     )
     .join('');
 
+  console.log(ingredientsMarkup);
   const markup = `
     <figure class="recipe__fig">
       <img src="${recipe.image}" alt="${recipe.title}" class="recipe__img" />
@@ -76,6 +77,37 @@ const renderRecipe = function (recipe) {
         <span>${recipe.title}</span>
       </h1>
     </figure>
+
+    <div class="recipe__details">
+    <div class="recipe__info">
+    <svg class="recipe__info-icon">
+      <use href="${icons}#icon-clock"></use>
+    </svg>
+    <span class="recipe__info-data recipe__info-data--minutes">${recipe.cookingTime}</span>
+    <span class="recipe__info-text">minutes</span>
+    </div>
+
+    <div class="recipe__info">
+    <svg class="recipe__info-icon">
+      <use href="${icons}#icon-users"></use>
+    </svg>
+    <span class="recipe__info-data recipe__info-data--people">${recipe.servings}</span>
+    <span class="recipe__info-text">servings</span>
+
+    <div class="recipe__info-buttons">
+      <button class="btn--tiny btn--increase-servings" data-update-to="${recipe.servings - 1}">
+        <svg>
+          <use href="${icons}#icon-minus-circle"></use>
+        </svg>
+      </button>
+      <button class="btn--tiny btn--increase-servings" data-update-to="${recipe.servings + 1}">
+        <svg>
+          <use href="${icons}#icon-plus-circle"></use>
+        </svg>
+      </button>
+      </div>
+    </div>
+    </div>
 
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>

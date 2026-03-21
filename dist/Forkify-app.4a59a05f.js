@@ -207,11 +207,11 @@
       });
     }
   }
-})({"jYB9d":[function(require,module,exports,__globalThis) {
+})({"7f4Ub":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 50375;
+var HMR_SERVER_PORT = 59162;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -767,6 +767,7 @@ const renderRecipe = function(recipe) {
         </div>
       </li>
     `).join('');
+    console.log(ingredientsMarkup);
     const markup = `
     <figure class="recipe__fig">
       <img src="${recipe.image}" alt="${recipe.title}" class="recipe__img" />
@@ -774,6 +775,37 @@ const renderRecipe = function(recipe) {
         <span>${recipe.title}</span>
       </h1>
     </figure>
+
+    <div class="recipe__details">
+    <div class="recipe__info">
+    <svg class="recipe__info-icon">
+      <use href="${(0, _iconsSvgDefault.default)}#icon-clock"></use>
+    </svg>
+    <span class="recipe__info-data recipe__info-data--minutes">${recipe.cookingTime}</span>
+    <span class="recipe__info-text">minutes</span>
+    </div>
+
+    <div class="recipe__info">
+    <svg class="recipe__info-icon">
+      <use href="${(0, _iconsSvgDefault.default)}#icon-users"></use>
+    </svg>
+    <span class="recipe__info-data recipe__info-data--people">${recipe.servings}</span>
+    <span class="recipe__info-text">servings</span>
+
+    <div class="recipe__info-buttons">
+      <button class="btn--tiny btn--increase-servings" data-update-to="${recipe.servings - 1}">
+        <svg>
+          <use href="${(0, _iconsSvgDefault.default)}#icon-minus-circle"></use>
+        </svg>
+      </button>
+      <button class="btn--tiny btn--increase-servings" data-update-to="${recipe.servings + 1}">
+        <svg>
+          <use href="${(0, _iconsSvgDefault.default)}#icon-plus-circle"></use>
+        </svg>
+      </button>
+      </div>
+    </div>
+    </div>
 
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
@@ -819,6 +851,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["jYB9d","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
+},{}]},["7f4Ub","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
 
 //# sourceMappingURL=Forkify-app.4a59a05f.js.map
