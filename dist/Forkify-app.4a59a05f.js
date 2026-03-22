@@ -207,11 +207,11 @@
       });
     }
   }
-})({"jYB9d":[function(require,module,exports,__globalThis) {
+})({"5DuvQ":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 50375;
+var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -729,8 +729,20 @@ let recipe;
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
 ///////////////////////////////////////
+const renderSpinner = function(parentEl) {
+    const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
+      </svg>
+    </div>
+  `;
+    parentEl.innerHTML = '';
+    parentEl.insertAdjacentHTML('afterbegin', markup);
+};
 const showRecipe = async function() {
     try {
+        renderSpinner(recipeContainer);
         const res = await fetch('https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886');
         const data = await res.json();
         console.log(res, data);
@@ -765,7 +777,6 @@ const showRecipe = async function() {
 };
 showRecipe();
 // render data
-recipeContainer.innerHTML = '';
 const renderRecipe = function(recipe) {
     const ingredientsMarkup = recipe.ingredients.map((ing)=>`
       <li class="recipe__ingredient">
@@ -826,23 +837,23 @@ const renderRecipe = function(recipe) {
     </div>
 
     <div class="recipe__directions">
-  <h2 class="heading--2">How to cook it</h2>
-  <p class="recipe__directions-text">
+    <h2 class="heading--2">How to cook it</h2>
+    <p class="recipe__directions-text">
     This recipe was carefully designed and tested by
     <span class="recipe__publisher">${recipe.publisher}</span>. Please check out
     directions at their website.
-  </p>
-  <a
+    </p>
+    <a
     class="btn--small recipe__btn"
     href="${recipe.sourceUrl}"
     target="_blank"
-  >
+    >
     <span>Directions</span>
     <svg class="search__icon">
       <use href="${(0, _iconsSvgDefault.default)}#icon-arrow-right"></use>
     </svg>
-  </a>
-</div>
+    </a>
+    </div>
   `;
     recipeContainer.innerHTML = '';
     recipeContainer.insertAdjacentHTML('afterbegin', markup);
@@ -896,6 +907,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["jYB9d","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
+},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
 
 //# sourceMappingURL=Forkify-app.4a59a05f.js.map

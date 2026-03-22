@@ -17,8 +17,22 @@ let recipe;
 
 ///////////////////////////////////////
 
+const renderSpinner = function (parentEl) {
+  const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${icons}#icon-loader"></use>
+      </svg>
+    </div>
+  `;
+
+  parentEl.innerHTML = '';
+  parentEl.insertAdjacentHTML('afterbegin', markup);
+};
+
 const showRecipe = async function () {
   try {
+    renderSpinner(recipeContainer);
     const res = await fetch(
       'https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886',
     );
@@ -62,8 +76,6 @@ const showRecipe = async function () {
 showRecipe();
 
 // render data
-
-recipeContainer.innerHTML = '';
 
 const renderRecipe = function (recipe) {
   const ingredientsMarkup = recipe.ingredients
@@ -130,23 +142,23 @@ const renderRecipe = function (recipe) {
     </div>
 
     <div class="recipe__directions">
-  <h2 class="heading--2">How to cook it</h2>
-  <p class="recipe__directions-text">
+    <h2 class="heading--2">How to cook it</h2>
+    <p class="recipe__directions-text">
     This recipe was carefully designed and tested by
     <span class="recipe__publisher">${recipe.publisher}</span>. Please check out
     directions at their website.
-  </p>
-  <a
+    </p>
+    <a
     class="btn--small recipe__btn"
     href="${recipe.sourceUrl}"
     target="_blank"
-  >
+    >
     <span>Directions</span>
     <svg class="search__icon">
       <use href="${icons}#icon-arrow-right"></use>
     </svg>
-  </a>
-</div>
+    </a>
+    </div>
   `;
 
   recipeContainer.innerHTML = '';
