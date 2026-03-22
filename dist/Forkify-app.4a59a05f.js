@@ -772,7 +772,7 @@ const showRecipe = async function() {
         console.log(recipe);
         renderRecipe(recipe);
     } catch (err) {
-        alert(err);
+        renderError(err.message);
     }
 };
 showRecipe();
@@ -873,6 +873,20 @@ recipeContainer.addEventListener('click', function(e) {
         renderRecipe(recipe);
     }
 });
+const renderError = function(message = `Something went wrong!`) {
+    const markup = `
+    <div class="error">
+      <div>
+        <svg>
+          <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>
+  `;
+    recipeContainer.innerHTML = '';
+    recipeContainer.insertAdjacentHTML('afterbegin', markup);
+};
 
 },{"url:../img/icons.svg":"fd0vu","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fd0vu":[function(require,module,exports,__globalThis) {
 module.exports = module.bundle.resolve("icons.0809ef97.svg") + "?" + Date.now();

@@ -69,7 +69,7 @@ const showRecipe = async function () {
     console.log(recipe);
     renderRecipe(recipe);
   } catch (err) {
-    alert(err);
+    renderError(err.message);
   }
 };
 
@@ -185,3 +185,19 @@ recipeContainer.addEventListener('click', function (e) {
     renderRecipe(recipe);
   }
 });
+
+const renderError = function (message = `Something went wrong!`) {
+  const markup = `
+    <div class="error">
+      <div>
+        <svg>
+          <use href="${icons}#icon-alert-triangle"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>
+  `;
+
+  recipeContainer.innerHTML = '';
+  recipeContainer.insertAdjacentHTML('afterbegin', markup);
+};
