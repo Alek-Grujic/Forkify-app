@@ -718,6 +718,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _iconsSvg = require("url:../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 const recipeContainer = document.querySelector('.recipe');
+const searchField = document.querySelector('.search__field');
+const searchBtn = document.querySelector('.search__btn');
 const timeout = function(s) {
     return new Promise(function(_, reject) {
         setTimeout(function() {
@@ -887,6 +889,22 @@ const renderError = function(message = `Something went wrong!`) {
     recipeContainer.innerHTML = '';
     recipeContainer.insertAdjacentHTML('afterbegin', markup);
 };
+const showSearchResults = async function() {
+    try {
+        const query = searchField.value;
+        if (!query) return;
+        const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes?search=${query}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        console.log(data);
+    } catch (err) {
+        console.error(err);
+    }
+};
+searchBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    showSearchResults();
+});
 
 },{"url:../img/icons.svg":"fd0vu","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fd0vu":[function(require,module,exports,__globalThis) {
 module.exports = module.bundle.resolve("icons.0809ef97.svg") + "?" + Date.now();

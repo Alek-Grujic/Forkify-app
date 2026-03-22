@@ -1,4 +1,6 @@
 const recipeContainer = document.querySelector('.recipe');
+const searchField = document.querySelector('.search__field');
+const searchBtn = document.querySelector('.search__btn');
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -201,3 +203,27 @@ const renderError = function (message = `Something went wrong!`) {
   recipeContainer.innerHTML = '';
   recipeContainer.insertAdjacentHTML('afterbegin', markup);
 };
+
+const showSearchResults = async function () {
+  try {
+    const query = searchField.value;
+
+    if (!query) return;
+
+    const res = await fetch(
+      `https://forkify-api.jonas.io/api/v2/recipes?search=${query}`,
+    );
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+searchBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  showSearchResults();
+});
