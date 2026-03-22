@@ -83,7 +83,6 @@ const renderRecipe = function (recipe) {
     )
     .join('');
 
-  console.log(ingredientsMarkup);
   const markup = `
     <figure class="recipe__fig">
       <img src="${recipe.image}" alt="${recipe.title}" class="recipe__img" />
@@ -129,6 +128,25 @@ const renderRecipe = function (recipe) {
         ${ingredientsMarkup}
       </ul>
     </div>
+
+    <div class="recipe__directions">
+  <h2 class="heading--2">How to cook it</h2>
+  <p class="recipe__directions-text">
+    This recipe was carefully designed and tested by
+    <span class="recipe__publisher">${recipe.publisher}</span>. Please check out
+    directions at their website.
+  </p>
+  <a
+    class="btn--small recipe__btn"
+    href="${recipe.sourceUrl}"
+    target="_blank"
+  >
+    <span>Directions</span>
+    <svg class="search__icon">
+      <use href="${icons}#icon-arrow-right"></use>
+    </svg>
+  </a>
+</div>
   `;
 
   recipeContainer.innerHTML = '';
