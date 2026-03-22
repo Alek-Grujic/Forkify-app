@@ -1,6 +1,7 @@
 const recipeContainer = document.querySelector('.recipe');
 const searchField = document.querySelector('.search__field');
 const searchBtn = document.querySelector('.search__btn');
+const resultsContainer = document.querySelector('.results');
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -217,7 +218,16 @@ const showSearchResults = async function () {
 
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
 
-    console.log(data);
+    const recipes = data.data.recipes.map(rec => {
+      return {
+        id: rec.id,
+        title: rec.title,
+        publisher: rec.publisher,
+        image: rec.image_url,
+      };
+    });
+
+    renderSearchResults(recipes);
   } catch (err) {
     console.error(err);
   }
@@ -227,3 +237,26 @@ searchBtn.addEventListener('click', function (e) {
   e.preventDefault();
   showSearchResults();
 });
+
+const renderRecipePreview = function (recipe) {
+  return `
+    <li class="preview">
+      <a class="preview__link" href="#${recipe.id}">
+        <figure class="preview__fig">
+          <img src="${recipe.image}" alt="${recipe.title}" />
+        </figure>
+        <div class="preview__data">
+          <h4 class="preview__title">${recipe.title}</h4>
+          <p class="preview__publisher">${recipe.publisher}</p>
+        </div>
+      </a>
+    </li>
+  `;
+};
+
+const renderSearchResults = function (recipes) {
+  const markup = recipes.map(renderRecipePreview).join('');
+
+  resultsContainer.innerHTML = '';
+  resultsContainer.insertAdjacentHTML('afterbegin', markup);
+};
