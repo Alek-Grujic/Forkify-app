@@ -207,6 +207,8 @@ const renderError = function (message = `Something went wrong!`) {
 
 const showSearchResults = async function () {
   try {
+    renderSpinner(resultsContainer);
+
     const query = searchField.value;
 
     if (!query) return;
@@ -228,6 +230,7 @@ const showSearchResults = async function () {
     });
 
     renderSearchResults(recipes);
+    searchField.value = '';
   } catch (err) {
     console.error(err);
   }
