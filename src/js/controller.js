@@ -84,6 +84,7 @@ const controlRecipe = async function () {
 
     if (!id) return;
 
+    updateActiveResult();
     renderSpinner(recipeContainer);
 
     const res = await fetch(
@@ -304,3 +305,15 @@ const renderSearchResults = function (recipes) {
 window.addEventListener('hashchange', function () {
   console.log(location.hash);
 });
+
+const updateActiveResult = function () {
+  const results = document.querySelectorAll('.preview__link');
+
+  results.forEach(link => link.classList.remove('preview__link--active'));
+
+  const activeLink = document.querySelector(
+    `.preview__link[href="${window.location.hash}"]`,
+  );
+
+  if (activeLink) activeLink.classList.add('preview__link--active');
+};
