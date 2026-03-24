@@ -2,6 +2,7 @@ const recipeContainer = document.querySelector('.recipe');
 const searchField = document.querySelector('.search__field');
 const searchBtn = document.querySelector('.search__btn');
 const resultsContainer = document.querySelector('.results');
+const paginationContainer = document.querySelector('.pagination');
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -19,6 +20,10 @@ let recipe;
 // https://forkify-api.jonas.io
 
 ///////////////////////////////////////
+
+let searchResults = [];
+let currentPage = 1;
+const resultsPerPage = 10;
 
 const renderSpinner = function (parentEl) {
   const markup = `
@@ -258,7 +263,17 @@ const showSearchResults = async function () {
 
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
 
-    const recipes = data.data.recipes.map(rec => {
+    // const recipes = data.data.recipes.map(rec => {
+    //   return {
+    //     id: rec.id,
+    //     title: rec.title,
+    //     publisher: rec.publisher,
+    //     image: rec.image_url,
+    //   };
+    // });
+
+    // renderSearchResults(recipes);
+    searchResults = data.data.recipes.map(rec => {
       return {
         id: rec.id,
         title: rec.title,
@@ -267,7 +282,8 @@ const showSearchResults = async function () {
       };
     });
 
-    renderSearchResults(recipes);
+    currentPage = 1;
+    renderSearchResultsPage(currentPage);
     searchField.value = '';
   } catch (err) {
     console.error(err);
@@ -317,3 +333,60 @@ const updateActiveResult = function () {
 
   if (activeLink) activeLink.classList.add('preview__link--active');
 };
+
+// pagination
+
+const getSearchResultsPage = function (page) {
+  const start = (page - 1) * resultsPerPage;
+  const end = page * resultsPerPage;
+
+  return searchResults.slice(start, end);
+};
+
+const renderSearchResultsPage = function (page) {
+  currentPage = page;
+
+  const recipes = getSearchResultsPage(page);
+  renderSearchResults(recipes);
+  renderPagination(page);
+};
+
+const createPaginationButton = function (page, type) {
+  return `
+    <button class="btn--inline pagination__btn--${type}" data-goto="${page}">
+      <span>Page ${page}</span>
+      <svg class="search__icon">
+        <use href="${icons}#icon-arrow-${type === 'prev' ? 'left' : 'right'}"></use>
+      </svg>
+    </button>
+  `;
+};
+
+const renderPagination = function (page) {
+  const numPages = Math.ceil(searchResults.length / resultsPerPage);
+
+  let markup = '';
+
+  if (page === 1 && numPages > 1) {
+    markup = createPaginationButton(page + 1, 'next');
+  } else if (page === numPages && numPages > 1) {
+    markup = createPaginationButton(page - 1, 'prev');
+  } else if (page < numPages) {
+    markup =
+      createPaginationButton(page - 1, 'prev') +
+      createPaginationButton(page + 1, 'next');
+  }
+
+  paginationContainer.innerHTML = '';
+  paginationContainer.insertAdjacentHTML('afterbegin', markup);
+};
+
+paginationContainer.addEventListener('click', function (e) {
+  const btn = e.target.closest('.btn--inline');
+
+  if (!btn) return;
+
+  const goToPage = Number(btn.dataset.goto);
+
+  renderSearchResultsPage(goToPage);
+});
