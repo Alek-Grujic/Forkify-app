@@ -349,6 +349,7 @@ const renderSearchResultsPage = function (page) {
   const recipes = getSearchResultsPage(page);
   renderSearchResults(recipes);
   renderPagination(page);
+  updateActiveResult();
 };
 
 const createPaginationButton = function (page, type) {

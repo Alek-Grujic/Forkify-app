@@ -207,11 +207,11 @@
       });
     }
   }
-})({"5DuvQ":[function(require,module,exports,__globalThis) {
+})({"4CV3p":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 1234;
+var HMR_SERVER_PORT = 56018;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -999,6 +999,7 @@ const renderSearchResultsPage = function(page) {
     const recipes = getSearchResultsPage(page);
     renderSearchResults(recipes);
     renderPagination(page);
+    updateActiveResult();
 };
 const createPaginationButton = function(page, type) {
     return `
@@ -1059,6 +1060,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
+},{}]},["4CV3p","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
 
 //# sourceMappingURL=Forkify-app.4a59a05f.js.map
