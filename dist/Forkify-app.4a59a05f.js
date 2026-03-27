@@ -748,66 +748,12 @@ const renderSpinner = function(parentEl) {
     parentEl.innerHTML = '';
     parentEl.insertAdjacentHTML('afterbegin', markup);
 };
-// const showRecipe = async function () {
-//   try {
-//     renderSpinner(recipeContainer);
-//     const res = await fetch(
-//       'https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886',
-//     );
-//     const data = await res.json();
-//     console.log(res, data);
-//     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-//     // let { recipe } = data.data;
-//     // recipe = {
-//     //   id: recipe.id,
-//     //   title: recipe.title,
-//     //   publisher: recipe.publisher,
-//     //   sourceUrl: recipe.source_url,
-//     //   image: recipe.image_url,
-//     //   servings: recipe.servings,
-//     //   cookingTime: recipe.cooking_time,
-//     //   ingredients: recipe.ingredients,
-//     // };
-//     const { recipe: recipeData } = data.data;
-//     recipe = {
-//       id: recipeData.id,
-//       title: recipeData.title,
-//       publisher: recipeData.publisher,
-//       sourceUrl: recipeData.source_url,
-//       image: recipeData.image_url,
-//       servings: recipeData.servings,
-//       cookingTime: recipeData.cooking_time,
-//       ingredients: recipeData.ingredients,
-//     };
-//     console.log(recipe);
-//     renderRecipe(recipe);
-//   } catch (err) {
-//     renderError(err.message);
-//   }
-// };
-// showRecipe();
 const controlRecipe = async function() {
     try {
         const id = window.location.hash.slice(1);
         if (!id) return;
         updateActiveResult();
         renderSpinner(recipeContainer);
-        // const res = await fetch(
-        //   `https://forkify-api.jonas.io/api/v2/recipes/${id}`,
-        // );
-        // const data = await res.json();
-        // if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-        // const { recipe: recipeData } = data.data;
-        // recipe = {
-        //   id: recipeData.id,
-        //   title: recipeData.title,
-        //   publisher: recipeData.publisher,
-        //   sourceUrl: recipeData.source_url,
-        //   image: recipeData.image_url,
-        //   servings: recipeData.servings,
-        //   cookingTime: recipeData.cooking_time,
-        //   ingredients: recipeData.ingredients,
-        // };
         await _modelJs.loadRecipe(id);
         renderRecipe(_modelJs.state.recipe);
     } catch (err) {
@@ -923,30 +869,10 @@ const renderError = function(message = `Something went wrong!`) {
 };
 const showSearchResults = async function() {
     try {
-        renderSpinner(resultsContainer);
         const query = searchField.value;
         if (!query) return;
-        const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes?search=${query}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-        // const recipes = data.data.recipes.map(rec => {
-        //   return {
-        //     id: rec.id,
-        //     title: rec.title,
-        //     publisher: rec.publisher,
-        //     image: rec.image_url,
-        //   };
-        // });
-        // renderSearchResults(recipes);
-        searchResults = data.data.recipes.map((rec)=>{
-            return {
-                id: rec.id,
-                title: rec.title,
-                publisher: rec.publisher,
-                image: rec.image_url
-            };
-        });
-        currentPage = 1;
+        renderSpinner(resultsContainer);
+        await _modelJs.loadSearchResults();
         renderSearchResultsPage(currentPage);
         searchField.value = '';
     } catch (err) {
@@ -1064,8 +990,16 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
 parcelHelpers.export(exports, "updateServings", ()=>updateServings);
+parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
+parcelHelpers.export(exports, "getSearchResultsPage", ()=>getSearchResultsPage);
 const state = {
-    recipe: {}
+    recipe: {},
+    search: {
+        query: '',
+        results: [],
+        page: 1,
+        resultsPerPage: 10
+    }
 };
 const loadRecipe = async function(id) {
     const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes/${id}`);
@@ -1088,6 +1022,27 @@ const updateServings = function(newServings) {
         ing.quantity = ing.quantity * newServings / state.recipe.servings;
     });
     state.recipe.servings = newServings;
+};
+const loadSearchResults = async function(query) {
+    state.search.query = query;
+    const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes?search=${query}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    state.search.results = data.data.recipes.map((rec)=>{
+        return {
+            id: rec.id,
+            title: rec.title,
+            publisher: rec.publisher,
+            image: rec.image_url
+        };
+    });
+    state.search.page = 1;
+};
+const getSearchResultsPage = function(page = state.search.page) {
+    state.search.page = page;
+    const start = (page - 1) * state.search.resultsPerPage;
+    const end = page * state.search.resultsPerPage;
+    return state.search.results.slice(start, end);
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["4CV3p","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")

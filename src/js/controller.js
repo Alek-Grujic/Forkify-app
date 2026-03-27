@@ -40,51 +40,6 @@ const renderSpinner = function (parentEl) {
   parentEl.insertAdjacentHTML('afterbegin', markup);
 };
 
-// const showRecipe = async function () {
-//   try {
-//     renderSpinner(recipeContainer);
-//     const res = await fetch(
-//       'https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886',
-//     );
-//     const data = await res.json();
-
-//     console.log(res, data);
-
-//     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-
-//     // let { recipe } = data.data;
-//     // recipe = {
-//     //   id: recipe.id,
-//     //   title: recipe.title,
-//     //   publisher: recipe.publisher,
-//     //   sourceUrl: recipe.source_url,
-//     //   image: recipe.image_url,
-//     //   servings: recipe.servings,
-//     //   cookingTime: recipe.cooking_time,
-//     //   ingredients: recipe.ingredients,
-//     // };
-
-//     const { recipe: recipeData } = data.data;
-//     recipe = {
-//       id: recipeData.id,
-//       title: recipeData.title,
-//       publisher: recipeData.publisher,
-//       sourceUrl: recipeData.source_url,
-//       image: recipeData.image_url,
-//       servings: recipeData.servings,
-//       cookingTime: recipeData.cooking_time,
-//       ingredients: recipeData.ingredients,
-//     };
-
-//     console.log(recipe);
-//     renderRecipe(recipe);
-//   } catch (err) {
-//     renderError(err.message);
-//   }
-// };
-
-// showRecipe();
-
 const controlRecipe = async function () {
   try {
     const id = window.location.hash.slice(1);
@@ -93,26 +48,6 @@ const controlRecipe = async function () {
 
     updateActiveResult();
     renderSpinner(recipeContainer);
-
-    // const res = await fetch(
-    //   `https://forkify-api.jonas.io/api/v2/recipes/${id}`,
-    // );
-    // const data = await res.json();
-
-    // if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-
-    // const { recipe: recipeData } = data.data;
-
-    // recipe = {
-    //   id: recipeData.id,
-    //   title: recipeData.title,
-    //   publisher: recipeData.publisher,
-    //   sourceUrl: recipeData.source_url,
-    //   image: recipeData.image_url,
-    //   servings: recipeData.servings,
-    //   cookingTime: recipeData.cooking_time,
-    //   ingredients: recipeData.ingredients,
-    // };
 
     await model.loadRecipe(id);
 
@@ -246,39 +181,13 @@ const renderError = function (message = `Something went wrong!`) {
 
 const showSearchResults = async function () {
   try {
-    renderSpinner(resultsContainer);
-
     const query = searchField.value;
-
     if (!query) return;
 
-    const res = await fetch(
-      `https://forkify-api.jonas.io/api/v2/recipes?search=${query}`,
-    );
-    const data = await res.json();
+    renderSpinner(resultsContainer);
 
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    await model.loadSearchResults();
 
-    // const recipes = data.data.recipes.map(rec => {
-    //   return {
-    //     id: rec.id,
-    //     title: rec.title,
-    //     publisher: rec.publisher,
-    //     image: rec.image_url,
-    //   };
-    // });
-
-    // renderSearchResults(recipes);
-    searchResults = data.data.recipes.map(rec => {
-      return {
-        id: rec.id,
-        title: rec.title,
-        publisher: rec.publisher,
-        image: rec.image_url,
-      };
-    });
-
-    currentPage = 1;
     renderSearchResultsPage(currentPage);
     searchField.value = '';
   } catch (err) {
