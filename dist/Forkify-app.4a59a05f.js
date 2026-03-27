@@ -715,6 +715,7 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"7dWZ8":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _modelJs = require("./model.js");
 var _iconsSvg = require("url:../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 const recipeContainer = document.querySelector('.recipe');
@@ -791,21 +792,24 @@ const controlRecipe = async function() {
         if (!id) return;
         updateActiveResult();
         renderSpinner(recipeContainer);
-        const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes/${id}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-        const { recipe: recipeData } = data.data;
-        recipe = {
-            id: recipeData.id,
-            title: recipeData.title,
-            publisher: recipeData.publisher,
-            sourceUrl: recipeData.source_url,
-            image: recipeData.image_url,
-            servings: recipeData.servings,
-            cookingTime: recipeData.cooking_time,
-            ingredients: recipeData.ingredients
-        };
-        renderRecipe(recipe);
+        // const res = await fetch(
+        //   `https://forkify-api.jonas.io/api/v2/recipes/${id}`,
+        // );
+        // const data = await res.json();
+        // if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        // const { recipe: recipeData } = data.data;
+        // recipe = {
+        //   id: recipeData.id,
+        //   title: recipeData.title,
+        //   publisher: recipeData.publisher,
+        //   sourceUrl: recipeData.source_url,
+        //   image: recipeData.image_url,
+        //   servings: recipeData.servings,
+        //   cookingTime: recipeData.cooking_time,
+        //   ingredients: recipeData.ingredients,
+        // };
+        await _modelJs.loadRecipe(id);
+        renderRecipe(_modelJs.state.recipe);
     } catch (err) {
         renderError(err.message);
     }
@@ -894,19 +898,13 @@ const renderRecipe = function(recipe) {
     recipeContainer.innerHTML = '';
     recipeContainer.insertAdjacentHTML('afterbegin', markup);
 };
-const updateServings = function(newServings) {
-    recipe.ingredients.forEach((ing)=>{
-        ing.quantity = ing.quantity * newServings / recipe.servings;
-    });
-    recipe.servings = newServings;
-};
 recipeContainer.addEventListener('click', function(e) {
     const btn = e.target.closest('.btn--increase-servings');
     if (!btn) return;
     const newServings = Number(btn.dataset.updateTo);
     if (newServings > 0) {
-        updateServings(newServings);
-        renderRecipe(recipe);
+        _modelJs.updateServings(newServings);
+        renderRecipe(_modelJs.state.recipe);
     }
 });
 const renderError = function(message = `Something went wrong!`) {
@@ -1027,7 +1025,7 @@ paginationContainer.addEventListener('click', function(e) {
     renderSearchResultsPage(goToPage);
 });
 
-},{"url:../img/icons.svg":"fd0vu","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fd0vu":[function(require,module,exports,__globalThis) {
+},{"url:../img/icons.svg":"fd0vu","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./model.js":"3QBkH"}],"fd0vu":[function(require,module,exports,__globalThis) {
 module.exports = module.bundle.resolve("icons.0809ef97.svg") + "?" + Date.now();
 
 },{}],"jnFvT":[function(require,module,exports,__globalThis) {
@@ -1060,6 +1058,38 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["4CV3p","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
+},{}],"3QBkH":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
+parcelHelpers.export(exports, "updateServings", ()=>updateServings);
+const state = {
+    recipe: {}
+};
+const loadRecipe = async function(id) {
+    const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes/${id}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    const { recipe: recipeData } = data.data;
+    state.recipe = {
+        id: recipeData.id,
+        title: recipeData.title,
+        publisher: recipeData.publisher,
+        sourceUrl: recipeData.source_url,
+        image: recipeData.image_url,
+        servings: recipeData.servings,
+        cookingTime: recipeData.cooking_time,
+        ingredients: recipeData.ingredients
+    };
+};
+const updateServings = function(newServings) {
+    state.recipe.ingredients.forEach((ing)=>{
+        ing.quantity = ing.quantity * newServings / state.recipe.servings;
+    });
+    state.recipe.servings = newServings;
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["4CV3p","7dWZ8"], "7dWZ8", "parcelRequire3a11", {}, "./", "/")
 
 //# sourceMappingURL=Forkify-app.4a59a05f.js.map

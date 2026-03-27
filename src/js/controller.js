@@ -1,3 +1,5 @@
+import * as model from './model.js';
+
 const recipeContainer = document.querySelector('.recipe');
 const searchField = document.querySelector('.search__field');
 const searchBtn = document.querySelector('.search__btn');
@@ -92,27 +94,29 @@ const controlRecipe = async function () {
     updateActiveResult();
     renderSpinner(recipeContainer);
 
-    const res = await fetch(
-      `https://forkify-api.jonas.io/api/v2/recipes/${id}`,
-    );
-    const data = await res.json();
+    // const res = await fetch(
+    //   `https://forkify-api.jonas.io/api/v2/recipes/${id}`,
+    // );
+    // const data = await res.json();
 
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    // if (!res.ok) throw new Error(`${data.message} (${res.status})`);
 
-    const { recipe: recipeData } = data.data;
+    // const { recipe: recipeData } = data.data;
 
-    recipe = {
-      id: recipeData.id,
-      title: recipeData.title,
-      publisher: recipeData.publisher,
-      sourceUrl: recipeData.source_url,
-      image: recipeData.image_url,
-      servings: recipeData.servings,
-      cookingTime: recipeData.cooking_time,
-      ingredients: recipeData.ingredients,
-    };
+    // recipe = {
+    //   id: recipeData.id,
+    //   title: recipeData.title,
+    //   publisher: recipeData.publisher,
+    //   sourceUrl: recipeData.source_url,
+    //   image: recipeData.image_url,
+    //   servings: recipeData.servings,
+    //   cookingTime: recipeData.cooking_time,
+    //   ingredients: recipeData.ingredients,
+    // };
 
-    renderRecipe(recipe);
+    await model.loadRecipe(id);
+
+    renderRecipe(model.state.recipe);
   } catch (err) {
     renderError(err.message);
   }
@@ -211,14 +215,6 @@ const renderRecipe = function (recipe) {
   recipeContainer.insertAdjacentHTML('afterbegin', markup);
 };
 
-const updateServings = function (newServings) {
-  recipe.ingredients.forEach(ing => {
-    ing.quantity = (ing.quantity * newServings) / recipe.servings;
-  });
-
-  recipe.servings = newServings;
-};
-
 recipeContainer.addEventListener('click', function (e) {
   const btn = e.target.closest('.btn--increase-servings');
 
@@ -227,8 +223,8 @@ recipeContainer.addEventListener('click', function (e) {
   const newServings = Number(btn.dataset.updateTo);
 
   if (newServings > 0) {
-    updateServings(newServings);
-    renderRecipe(recipe);
+    model.updateServings(newServings);
+    renderRecipe(model.state.recipe);
   }
 });
 
