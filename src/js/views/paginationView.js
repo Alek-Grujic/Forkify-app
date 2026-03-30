@@ -61,6 +61,17 @@ class PaginationView {
 
     return '';
   }
+
+  addHandlerClick(handler) {
+    this.#parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--inline');
+
+      if (!btn) return;
+
+      const goToPage = Number(btn.dataset.goto);
+      handler(goToPage);
+    });
+  }
 }
 
 export default new PaginationView();

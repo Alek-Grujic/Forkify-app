@@ -11,7 +11,7 @@ import icons from 'url:../img/icons.svg';
 const searchField = document.querySelector('.search__field');
 const searchBtn = document.querySelector('.search__btn');
 const resultsContainer = document.querySelector('.results');
-const paginationContainer = document.querySelector('.pagination');
+// const paginationContainer = document.querySelector('.pagination');
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -103,13 +103,14 @@ const renderSearchResultsPage = function (page) {
   paginationView.render(model.state.search);
   updateActiveResult();
 };
+paginationView.addHandlerClick(renderSearchResultsPage);
 
-paginationContainer.addEventListener('click', function (e) {
-  const btn = e.target.closest('.btn--inline');
+// paginationContainer.addEventListener('click', function (e) {
+//   const btn = e.target.closest('.btn--inline');
 
-  if (!btn) return;
+//   if (!btn) return;
 
-  const goToPage = Number(btn.dataset.goto);
+//   const goToPage = Number(btn.dataset.goto);
 
-  renderSearchResultsPage(goToPage);
-});
+//   renderSearchResultsPage(goToPage);
+// });
