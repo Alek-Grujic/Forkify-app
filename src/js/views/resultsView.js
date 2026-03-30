@@ -1,17 +1,10 @@
-class ResultsView {
-  #parentElement = document.querySelector('.results');
-  #data;
+import View from './View.js';
 
-  render(data) {
-    this.#data = data;
-    const markup = this._generateMarkup();
-
-    this.#parentElement.innerHTML = '';
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
+class ResultsView extends View {
+  _parentElement = document.querySelector('.results');
 
   _generateMarkup() {
-    return this.#data.map(this._generateMarkupPreview).join('');
+    return this._data.map(this._generateMarkupPreview).join('');
   }
 
   _generateMarkupPreview(recipe) {
