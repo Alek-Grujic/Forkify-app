@@ -726,17 +726,16 @@ var _paginationViewJs = require("./views/paginationView.js");
 var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
 var _iconsSvg = require("url:../img/icons.svg");
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+const searchForm = document.querySelector('.search');
 const searchField = document.querySelector('.search__field');
-const searchBtn = document.querySelector('.search__btn');
 const resultsContainer = document.querySelector('.results');
-// const paginationContainer = document.querySelector('.pagination');
-const timeout = function(s) {
-    return new Promise(function(_, reject) {
-        setTimeout(function() {
-            reject(new Error(`Request took too long! Timeout after ${s} second`));
-        }, s * 1000);
-    });
-};
+// const timeout = function (s) {
+//   return new Promise(function (_, reject) {
+//     setTimeout(function () {
+//       reject(new Error(`Request took too long! Timeout after ${s} second`));
+//     }, s * 1000);
+//   });
+// };
 const renderSpinner = function(parentEl) {
     const markup = `
     <div class="spinner">
@@ -779,7 +778,7 @@ const showSearchResults = async function() {
         console.error(err);
     }
 };
-searchBtn.addEventListener('click', function(e) {
+searchForm.addEventListener('submit', function(e) {
     e.preventDefault();
     showSearchResults();
 });
@@ -796,12 +795,7 @@ const renderSearchResultsPage = function(page) {
     (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
     updateActiveResult();
 };
-(0, _paginationViewJsDefault.default).addHandlerClick(renderSearchResultsPage); // paginationContainer.addEventListener('click', function (e) {
- //   const btn = e.target.closest('.btn--inline');
- //   if (!btn) return;
- //   const goToPage = Number(btn.dataset.goto);
- //   renderSearchResultsPage(goToPage);
- // });
+(0, _paginationViewJsDefault.default).addHandlerClick(renderSearchResultsPage);
 
 },{"./model.js":"3QBkH","./views/recipeView.js":"3wx5k","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","url:../img/icons.svg":"fd0vu","./views/resultsView.js":"kBQ4r","./views/paginationView.js":"7NIiB"}],"3QBkH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

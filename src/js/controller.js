@@ -8,18 +8,17 @@ import paginationView from './views/paginationView.js';
 
 import icons from 'url:../img/icons.svg';
 
+const searchForm = document.querySelector('.search');
 const searchField = document.querySelector('.search__field');
-const searchBtn = document.querySelector('.search__btn');
 const resultsContainer = document.querySelector('.results');
-// const paginationContainer = document.querySelector('.pagination');
 
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
+// const timeout = function (s) {
+//   return new Promise(function (_, reject) {
+//     setTimeout(function () {
+//       reject(new Error(`Request took too long! Timeout after ${s} second`));
+//     }, s * 1000);
+//   });
+// };
 
 const renderSpinner = function (parentEl) {
   const markup = `
@@ -77,7 +76,7 @@ const showSearchResults = async function () {
   }
 };
 
-searchBtn.addEventListener('click', function (e) {
+searchForm.addEventListener('submit', function (e) {
   e.preventDefault();
   showSearchResults();
 });
@@ -104,13 +103,3 @@ const renderSearchResultsPage = function (page) {
   updateActiveResult();
 };
 paginationView.addHandlerClick(renderSearchResultsPage);
-
-// paginationContainer.addEventListener('click', function (e) {
-//   const btn = e.target.closest('.btn--inline');
-
-//   if (!btn) return;
-
-//   const goToPage = Number(btn.dataset.goto);
-
-//   renderSearchResultsPage(goToPage);
-// });
