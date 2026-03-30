@@ -724,29 +724,8 @@ var _resultsViewJs = require("./views/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
 var _paginationViewJs = require("./views/paginationView.js");
 var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
-var _iconsSvg = require("url:../img/icons.svg");
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 const searchForm = document.querySelector('.search');
 const searchField = document.querySelector('.search__field');
-const resultsContainer = document.querySelector('.results');
-// const timeout = function (s) {
-//   return new Promise(function (_, reject) {
-//     setTimeout(function () {
-//       reject(new Error(`Request took too long! Timeout after ${s} second`));
-//     }, s * 1000);
-//   });
-// };
-const renderSpinner = function(parentEl) {
-    const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
-      </svg>
-    </div>
-  `;
-    parentEl.innerHTML = '';
-    parentEl.insertAdjacentHTML('afterbegin', markup);
-};
 const controlRecipe = async function() {
     try {
         const id = window.location.hash.slice(1);
@@ -770,12 +749,12 @@ const showSearchResults = async function() {
     try {
         const query = searchField.value;
         if (!query) return;
-        renderSpinner(resultsContainer);
+        (0, _resultsViewJsDefault.default).renderSpinner();
         await _modelJs.loadSearchResults(query);
         renderSearchResultsPage(_modelJs.state.search.page);
         searchField.value = '';
     } catch (err) {
-        console.error(err);
+        (0, _resultsViewJsDefault.default).renderError(err.message);
     }
 };
 searchForm.addEventListener('submit', function(e) {
@@ -797,7 +776,7 @@ const renderSearchResultsPage = function(page) {
 };
 (0, _paginationViewJsDefault.default).addHandlerClick(renderSearchResultsPage);
 
-},{"./model.js":"3QBkH","./views/recipeView.js":"3wx5k","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","url:../img/icons.svg":"fd0vu","./views/resultsView.js":"kBQ4r","./views/paginationView.js":"7NIiB"}],"3QBkH":[function(require,module,exports,__globalThis) {
+},{"./model.js":"3QBkH","./views/recipeView.js":"3wx5k","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./views/resultsView.js":"kBQ4r","./views/paginationView.js":"7NIiB"}],"3QBkH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);

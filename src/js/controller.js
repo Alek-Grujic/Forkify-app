@@ -6,32 +6,8 @@ import recipeView from './views/recipeView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 
-import icons from 'url:../img/icons.svg';
-
 const searchForm = document.querySelector('.search');
 const searchField = document.querySelector('.search__field');
-const resultsContainer = document.querySelector('.results');
-
-// const timeout = function (s) {
-//   return new Promise(function (_, reject) {
-//     setTimeout(function () {
-//       reject(new Error(`Request took too long! Timeout after ${s} second`));
-//     }, s * 1000);
-//   });
-// };
-
-const renderSpinner = function (parentEl) {
-  const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${icons}#icon-loader"></use>
-      </svg>
-    </div>
-  `;
-
-  parentEl.innerHTML = '';
-  parentEl.insertAdjacentHTML('afterbegin', markup);
-};
 
 const controlRecipe = async function () {
   try {
@@ -65,14 +41,14 @@ const showSearchResults = async function () {
     const query = searchField.value;
     if (!query) return;
 
-    renderSpinner(resultsContainer);
+    resultsView.renderSpinner();
 
     await model.loadSearchResults(query);
 
     renderSearchResultsPage(model.state.search.page);
     searchField.value = '';
   } catch (err) {
-    console.error(err);
+    resultsView.renderError(err.message);
   }
 };
 
