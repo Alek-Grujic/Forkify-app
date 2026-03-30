@@ -4,6 +4,7 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import resultsView from './views/resultsView.js';
+import paginationView from './views/paginationView.js';
 
 import icons from 'url:../img/icons.svg';
 
@@ -99,40 +100,8 @@ const renderSearchResultsPage = function (page) {
   const recipes = model.getSearchResultsPage(page);
 
   resultsView.render(recipes);
-  renderPagination(page);
+  paginationView.render(model.state.search);
   updateActiveResult();
-};
-
-const createPaginationButton = function (page, type) {
-  return `
-    <button class="btn--inline pagination__btn--${type}" data-goto="${page}">
-      <span>Page ${page}</span>
-      <svg class="search__icon">
-        <use href="${icons}#icon-arrow-${type === 'prev' ? 'left' : 'right'}"></use>
-      </svg>
-    </button>
-  `;
-};
-
-const renderPagination = function (page) {
-  const numPages = Math.ceil(
-    model.state.search.results.length / model.state.search.resultsPerPage,
-  );
-
-  let markup = '';
-
-  if (page === 1 && numPages > 1) {
-    markup = createPaginationButton(page + 1, 'next');
-  } else if (page === numPages && numPages > 1) {
-    markup = createPaginationButton(page - 1, 'prev');
-  } else if (page < numPages) {
-    markup =
-      createPaginationButton(page - 1, 'prev') +
-      createPaginationButton(page + 1, 'next');
-  }
-
-  paginationContainer.innerHTML = '';
-  paginationContainer.insertAdjacentHTML('afterbegin', markup);
 };
 
 paginationContainer.addEventListener('click', function (e) {
