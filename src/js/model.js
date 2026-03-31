@@ -98,3 +98,65 @@ const init = function () {
 };
 
 init();
+
+export const uploadRecipe = async function (newRecipe) {
+  try {
+    const ingredients = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ing => {
+        const ingArr = ing[1].split(',').map(el => el.trim());
+
+        if (ingArr.length !== 3)
+          throw new Error(
+            'Wrong ingredient format! Please use the correct format :)',
+          );
+
+        const [quantity, unit, description] = ingArr;
+
+        return {
+          quantity: quantity ? +quantity : null,
+          unit,
+          description,
+        };
+      });
+
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cooking_time: +newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients,
+    };
+
+    const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(recipe),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+
+    const { recipe: recipeData } = data.data;
+
+    state.recipe = {
+      id: recipeData.id,
+      title: recipeData.title,
+      publisher: recipeData.publisher,
+      sourceUrl: recipeData.source_url,
+      image: recipeData.image_url,
+      servings: recipeData.servings,
+      cookingTime: recipeData.cooking_time,
+      ingredients: recipeData.ingredients,
+    };
+
+    addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
+};
