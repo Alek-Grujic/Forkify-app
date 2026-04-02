@@ -821,6 +821,7 @@ parcelHelpers.export(exports, "getSearchResultsPage", ()=>getSearchResultsPage);
 parcelHelpers.export(exports, "addBookmark", ()=>addBookmark);
 parcelHelpers.export(exports, "deleteBookmark", ()=>deleteBookmark);
 parcelHelpers.export(exports, "uploadRecipe", ()=>uploadRecipe);
+var _configJs = require("./config.js");
 const state = {
     recipe: {},
     search: {
@@ -915,13 +916,22 @@ const uploadRecipe = async function(newRecipe) {
             servings: +newRecipe.servings,
             ingredients
         };
-        const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes`, {
+        // const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify(recipe),
+        // });
+        const res = await fetch(`${(0, _configJs.API_URL)}?key=${(0, _configJs.KEY)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(recipe)
         });
+        console.log((0, _configJs.KEY));
+        console.log(`${(0, _configJs.API_URL)}?key=${(0, _configJs.KEY)}`);
         const data = await res.json();
         if (!res.ok) throw new Error(`${data.message} (${res.status})`);
         const { recipe: recipeData } = data.data;
@@ -941,7 +951,7 @@ const uploadRecipe = async function(newRecipe) {
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./config.js":"2hPh4"}],"jnFvT":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -971,7 +981,15 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"3wx5k":[function(require,module,exports,__globalThis) {
+},{}],"2hPh4":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL);
+parcelHelpers.export(exports, "KEY", ()=>KEY);
+const API_URL = 'https://forkify-api.jonas.io/api/v2/recipes';
+const KEY = 'TVOJ_API_KEY';
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3wx5k":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _iconsSvg = require("url:../../img/icons.svg");

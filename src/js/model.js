@@ -1,3 +1,5 @@
+import { API_URL, KEY } from './config.js';
+
 export const state = {
   recipe: {},
   search: {
@@ -130,13 +132,24 @@ export const uploadRecipe = async function (newRecipe) {
       ingredients,
     };
 
-    const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes`, {
+    // const res = await fetch(`https://forkify-api.jonas.io/api/v2/recipes`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(recipe),
+    // });
+
+    const res = await fetch(`${API_URL}?key=${KEY}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(recipe),
     });
+
+    console.log(KEY);
+    console.log(`${API_URL}?key=${KEY}`);
 
     const data = await res.json();
 
